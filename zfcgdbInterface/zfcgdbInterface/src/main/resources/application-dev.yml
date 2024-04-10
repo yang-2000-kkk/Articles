@@ -1,0 +1,9 @@
+file:
+  picUrl: https://localhost:8080/zfcgdbInterface/file/
+  download:
+    #TODO
+    picPath: E:/file/
+    picRelativePath: /file/**
+
+server:
+  contextPath: /zfcgdbInterface/

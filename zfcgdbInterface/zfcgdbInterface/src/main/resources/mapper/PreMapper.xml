@@ -1,0 +1,259 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zfcgdbinterface.dao.PreDao">
+
+    <resultMap id="homeMap" type="com.zfcgdbinterface.po.Home">
+        <result column="content" property="content" jdbcType="VARCHAR"/>
+        <result column="img_url" property="img" jdbcType="VARCHAR"/>
+    </resultMap>
+    <!--首页-->
+    <select id="homeList" resultMap="homeMap">
+        SELECT content,img_url FROM home
+    </select>
+    <!--首页图片组-->
+
+    <select id="homeBankImg" resultType="string">
+        SELECT img FROM bank LIMIT 12
+    </select>
+    <!--客户问答模块-->
+    <!--TODO -->
+    <resultMap id="qusMap" type="com.zfcgdbinterface.po.news.Qus">
+        <result column="id" property="id"/>
+        <result column="title" property="qus"/>
+        <result column="generalize" property="ans"/>
+    </resultMap>
+    <select id="qusByisTrueList" resultMap="qusMap">
+        SELECT news.id,title,generalize FROM news,news_client_question_answer where
+        news.id = news_client_question_answer.id and
+        news_type='客户问答' and is_true='true' order by news.id desc
+    </select>
+
+    <resultMap id="homeNewsMap" type="com.zfcgdbinterface.po.news.HomeNews">
+        <result column="title" property="title" jdbcType="VARCHAR"/>
+        <result column="news_time" property="newsTime" jdbcType="VARCHAR"/>
+    </resultMap>
+    <!--TODO-->
+    <select id="news" resultMap="homeNewsMap">
+        SELECT id,title,news_time FROM news where news_type='行业新闻' order by id desc LIMIT 2
+    </select>
+
+    <resultMap id="companyIntroMap" type="com.zfcgdbinterface.po.CompanyIntro">
+        <result column="title" property="title" jdbcType="VARCHAR"/>
+        <result column="title_pra" property="titlePra" jdbcType="VARCHAR"/>
+        <result column="title_images" property="titleImages" jdbcType="VARCHAR"/>
+    </resultMap>
+    <!--公司简介-->
+    <select id="companyIntroList" resultMap="companyIntroMap">
+        SELECT title,title_pra,title_images FROM company_intro where company_type=#{companyType}
+    </select>
+
+    <resultMap id="contactMap" type="com.zfcgdbinterface.po.Contact">
+        <result column="company_name" property="companyName" jdbcType="VARCHAR"/>
+        <result column="address" property="address" jdbcType="VARCHAR"/>
+        <result column="postal_code" property="postalCode" jdbcType="VARCHAR"/>
+        <result column="tel" property="tel" jdbcType="VARCHAR"/>
+        <result column="mail" property="mail" jdbcType="VARCHAR"/>
+        <result column="subway_mode" property="subwayMode" jdbcType="VARCHAR"/>
+        <result column="bus_mode" property="busMode" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <!--合作银行-->
+    <select id="bankImg" resultType="string">
+        SELECT img FROM bank
+    </select>
+
+
+    <!--联系我们-->
+    <select id="contact" resultMap="contactMap">
+        SELECT company_name,address,postal_code,tel,mail,subway_mode,bus_mode FROM contact
+    </select>
+
+    <!--业务介绍-->
+    <select id="businessIntro1List" resultType="com.zfcgdbinterface.po.business.BusinessIntro1">
+        SELECT title,pra FROM business_intro1 where business_type=#{businessType}
+    </select>
+    <resultMap id="businessIntro2Map" type="com.zfcgdbinterface.po.business.BusinessIntro2">
+        <result column="title_c" property="titleC" jdbcType="VARCHAR"/>
+        <result column="qus01" property="qus01" jdbcType="VARCHAR"/>
+        <result column="qus02" property="qus02" jdbcType="VARCHAR"/>
+        <result column="img_p" property="imgP" jdbcType="VARCHAR"/>
+    </resultMap>
+    <select id="businessIntro2List" resultMap="businessIntro2Map">
+        SELECT title_c,qus01,qus02,img_p FROM business_intro2 where business_type=#{businessType}
+    </select>
+    <select id="businessIntro2Img" resultType="string">
+        SELECT pic FROM business_intro_pic where business_intro_id=#{businessIntroId}
+    </select>
+
+
+    <!--新闻-->
+    <resultMap id="newsMap" type="com.zfcgdbinterface.po.news.News">
+        <result column="id" property="id"/>
+        <result column="title" property="title"/>
+        <result column="generalize" property="generalize"/>
+        <result column="news_time" property="newsTime"/>
+    </resultMap>
+    <select id="newsList" resultMap="newsMap">
+        SELECT id,title,generalize,news_time FROM news where news_type=#{news_type} order by id desc
+    </select>
+    <select id="findNewsSwitch" resultType="string">
+        SELECT switchs FROM news_type where news_type=#{news_type}
+    </select>
+    <!--TODO -->
+    <!--客户问答模块-->
+    <select id="qusList" resultMap="newsMap">
+        SELECT id,title,generalize,news_time FROM news where news_type='客户问答' order by id desc
+    </select>
+    <!--新闻-->
+    <resultMap id="detailListMap" type="com.zfcgdbinterface.po.news.NewsDetail">
+        <result column="id" property="id"/>
+        <result column="title" property="title"/>
+        <result column="news_time" property="newsTime"/>
+        <result column="pra" property="pra"/>
+    </resultMap>
+    <select id="detailList" resultMap="detailListMap">
+        SELECT id,title,news_time,pra FROM news where id=#{id}
+    </select>
+
+    <!--保函查询-->
+    <resultMap id="loiFindMap" type="com.zfcgdbinterface.po.loifind.LOIFind">
+        <result column="project_name" property="projectName"/>
+        <result column="display_text" property="displayText"/>
+        <result column="switchs" property="switchs"/>
+        <result column="is_true" property="isTrue"/>
+    </resultMap>
+    <select id="loiFindList" resultMap="loiFindMap">
+        SELECT project_name,display_text,switchs,is_true FROM l_o_i_find where loi_id = #{loiId}
+    </select>
+    <resultMap id="loiFindVOMap" type="com.zfcgdbinterface.po.loifind.LOIFindVO">
+        <result column="project_name" property="projectName"/>
+        <result column="switchs" property="switchs"/>
+        <result column="is_true" property="isTrue"/>
+    </resultMap>
+    <select id="loiFindVOList" resultMap="loiFindVOMap">
+        SELECT project_name,switchs,is_true FROM l_o_i_find where loi_id = #{loiId}
+    </select>
+    <select id="loiFindSwitchs" resultType="string">
+        SELECT switchs FROM l_o_i_find where loi_id = #{loiId}
+    </select>
+    <select id="loiFindIsTrue" resultType="string">
+        SELECT is_true FROM l_o_i_find where loi_id = #{loiId}
+    </select>
+    <select id="loiFindPic" resultType="string">
+        SELECT pic FROM l_o_i_pic where loi_id = #{loiId}
+    </select>
+
+    <select id="findImageByType" resultType="java.lang.String">
+        SELECT img_url FROM rotation_image WHERE type_id = #{type}
+    </select>
+
+    <!--文件下载-->
+    <select id="findFileName" resultType="java.lang.String">
+        SELECT file_name FROM file_upload order by id
+    </select>
+
+    <insert id="bankLgFindEngineeringInsert">
+        INSERT INTO bank_lg_find_engineering
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="pojo.typeId != null">type_id,</if>
+            <if test="pojo.bankLg != null">bank_lg,</if>
+            <if test="pojo.projectName != null">project_name,</if>
+            <if test="pojo.term != null">term,</if>
+            <if test="pojo.guaranteeSum != null">guarantee_sum,</if>
+            <if test="pojo.qualification != null">qualification,</if>
+            <if test="pojo.grade != null">grade,</if>
+            <if test="pojo.nature != null">nature,</if>
+            <if test="pojo.aQualification != null">a_qualification,</if>
+            <if test="pojo.equirement != null">equirement,</if>
+            <if test="pojo.applicantTel != null">applicant_tel,</if>
+            <if test="pojo.applicantEmail != null">applicant_email,</if>
+            <if test="pojo.applicantName != null">applicant_name,</if>
+        </trim>
+        VALUES
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="pojo.typeId != null">#{pojo.typeId},</if>
+            <if test="pojo.bankLg != null">#{pojo.bankLg},</if>
+            <if test="pojo.projectName != null">#{pojo.projectName},</if>
+            <if test="pojo.term != null">#{pojo.term},</if>
+            <if test="pojo.guaranteeSum != null">#{pojo.guaranteeSum},</if>
+            <if test="pojo.qualification != null">#{pojo.qualification},</if>
+            <if test="pojo.grade != null">#{pojo.grade},</if>
+            <if test="pojo.nature != null">#{pojo.nature},</if>
+            <if test="pojo.aQualification != null">#{pojo.aQualification},</if>
+            <if test="pojo.equirement != null">#{pojo.equirement},</if>
+            <if test="pojo.applicantTel != null">#{pojo.applicantTel},</if>
+            <if test="pojo.applicantEmail != null">#{pojo.applicantEmail},</if>
+            <if test="pojo.applicantName != null">#{pojo.applicantName},</if>
+        </trim>
+    </insert>
+
+    <insert id="bankLgFindPurchaseInsert">
+        INSERT INTO bank_lg_find_purchase
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="pojo.typeId != null">type_id,</if>
+            <if test="pojo.bankLg != null">bank_lg,</if>
+            <if test="pojo.projectName != null">project_name,</if>
+            <if test="pojo.term != null">term,</if>
+            <if test="pojo.guaranteeSum != null">guarantee_sum,</if>
+            <if test="pojo.nature != null">nature,</if>
+            <if test="pojo.aQualification != null">a_qualification,</if>
+            <if test="pojo.equirement != null">equirement,</if>
+            <if test="pojo.applicantTel != null">applicant_tel,</if>
+            <if test="pojo.applicantEmail != null">applicant_email,</if>
+            <if test="pojo.applicantName != null">applicant_name,</if>
+        </trim>
+        VALUES
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="pojo.typeId != null">#{pojo.typeId},</if>
+            <if test="pojo.bankLg != null">#{pojo.bankLg},</if>
+            <if test="pojo.projectName != null">#{pojo.projectName},</if>
+            <if test="pojo.term != null">#{pojo.term},</if>
+            <if test="pojo.guaranteeSum != null">#{pojo.guaranteeSum},</if>
+            <if test="pojo.nature != null">#{pojo.nature},</if>
+            <if test="pojo.aQualification != null">#{pojo.aQualification},</if>
+            <if test="pojo.equirement != null">#{pojo.equirement},</if>
+            <if test="pojo.applicantTel != null">#{pojo.applicantTel},</if>
+            <if test="pojo.applicantEmail != null">#{pojo.applicantEmail},</if>
+            <if test="pojo.applicantName != null">#{pojo.applicantName},</if>
+        </trim>
+    </insert>
+
+    <insert id="companyLgFindInsert">
+        INSERT INTO company_lg_find
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="pojo.typeId != null">type_id,</if>
+            <if test="pojo.types != null">types,</if>
+            <if test="pojo.projectName != null">project_name,</if>
+            <if test="pojo.term != null">term,</if>
+            <if test="pojo.guaranteeSum != null">guarantee_sum,</if>
+            <if test="pojo.applicantTel != null">applicant_tel,</if>
+            <if test="pojo.applicantEmail != null">applicant_email,</if>
+            <if test="pojo.applicantName != null">applicant_name,</if>
+        </trim>
+        VALUES
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="pojo.typeId != null">#{pojo.typeId},</if>
+            <if test="pojo.types != null">#{pojo.types},</if>
+            <if test="pojo.projectName != null">#{pojo.projectName},</if>
+            <if test="pojo.term != null">#{pojo.term},</if>
+            <if test="pojo.guaranteeSum != null">#{pojo.guaranteeSum},</if>
+            <if test="pojo.applicantTel != null">#{pojo.applicantTel},</if>
+            <if test="pojo.applicantEmail != null">#{pojo.applicantEmail},</if>
+            <if test="pojo.applicantName != null">#{pojo.applicantName},</if>
+        </trim>
+    </insert>
+
+
+    <resultMap id="SubscriberMap" type="com.zfcgdbinterface.po.mail.Subscriber">
+        <result column="subscriber_mail" property="subscriberMail" jdbcType="VARCHAR"/>
+        <result column="subscriber_mail_password" property="subscriberMailPassword" jdbcType="VARCHAR"/>
+        <result column="subscriber_mail_host" property="subscriberMailHost" jdbcType="VARCHAR"/>
+    </resultMap>
+    <select id="findMailIntro" parameterType="com.zfcgdbinterface.po.mail.Subscriber" resultMap="SubscriberMap">
+        select
+        subscriber_mail,subscriber_mail_password,
+        subscriber_mail_host
+        from subscriber
+        where subscriber_id=1;
+    </select>
+</mapper>

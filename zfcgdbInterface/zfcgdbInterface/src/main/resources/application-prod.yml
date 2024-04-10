@@ -1,0 +1,8 @@
+file:
+  download:
+    #TODO
+    picPath: /usr/file/
+    picRelativePath: /file/**
+#允许域跨站请求
+cook.Access-Control-Allow-Origin: '*'
+
